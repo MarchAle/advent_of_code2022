@@ -20,15 +20,14 @@ s_list	*get_child(std::vector<struct s_list *> &dir, std::string name)
 	return (NULL);
 }
 
-int	sum_dir(s_list *current, int &total_sum)
+int	sum_dir(s_list *current, std::set<int> &spaces)
 {
 	int	sum = current->sum;
 	for (std::vector<struct s_list *>::iterator it = current->dir.begin(); it != current->dir.end(); it++)
 	{
-		sum += sum_dir(*it, total_sum);
+		sum += sum_dir(*it, spaces);
 	}
-	if (sum <= 100000)
-		total_sum += sum;
+	spaces.insert(sum);
 	return (sum);
 }
 
@@ -72,8 +71,20 @@ int main()
 		}
 		i++;
 	}
-	int	sum_of_dir = 0;
-	sum_dir(home, sum_of_dir);
-	std::cout << sum_of_dir << std::endl;
+	std::set<int> spaces;
+	int total_sum = sum_dir(home, spaces);
+	int space_left = 70000000 - total_sum;
+	int min_space = 30000000 - space_left;
+
+	std::cout << total_sum << " " << space_left << " " << min_space << std::endl;
+
+	for (std::set<int>::iterator it = spaces.begin(); it != spaces.end(); it++)
+	{
+		if ((*it) > min_space)
+		{
+			std::cout << *it << std::endl;
+			break;
+		}
+	}
 	exit(1);
 }
