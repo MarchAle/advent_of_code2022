@@ -10,100 +10,109 @@ std::vector<std::string> split(std::string &names)
 	return (result);
 }
 
+void	add_tail_pos(std::vector<t_coord> &tail_pos, t_coord &tail_current)
+{
+	for (std::vector<t_coord>::iterator it = tail_pos.begin(); it != tail_pos.end(); it++)
+	{
+		if (tail_current.x == (*it).x && tail_current.y == (*it).y)
+			return ;
+	}
+	tail_pos.push_back(tail_current);
+}
+
+void	move_tail(t_coord &head_current, t_coord &tail_current)
+{
+	for (int i = -1; i <= 1; i++)
+	{
+		for (int j = -1; j <= 1; j++)
+		{
+			if (head_current.x + i == tail_current.x && head_current.y + j == tail_current.y)
+				return ;
+		}
+	}
+	if (head_current.y == tail_current.y)
+	{
+		if (head_current.x < tail_current.x)
+			tail_current.x--;
+		else if (head_current.x > tail_current.x)
+			tail_current.x++;
+	}
+	else if (head_current.x == tail_current.x)
+	{
+		if (head_current.y < tail_current.y)
+			tail_current.y--;
+		else if (head_current.y > tail_current.y)
+			tail_current.y++;
+	}
+	else if (head_current.y > tail_current.y)
+	{
+		if (head_current.x < tail_current.x)
+			tail_current.x--;
+		else if (head_current.x > tail_current.x)
+			tail_current.x++;
+		tail_current.y++;
+	}
+	else if (head_current.y < tail_current.y)
+	{
+		if (head_current.x < tail_current.x)
+			tail_current.x--;
+		else if (head_current.x > tail_current.x)
+			tail_current.x++;
+		tail_current.y--;
+	}
+}
+
+void	move_head(std::vector<t_coord> &tail_pos, t_coord &head_current, t_coord &tail_current, std::string &dir, int step)
+{
+	int	step_count = 0;
+	while (step_count < step)
+	{
+		switch (dir.at(0))
+		{
+		case 'R':
+			head_current.x++;
+			break;
+		case 'L':
+			head_current.x--;
+			break;
+		case 'U':
+			head_current.y++;
+			break;
+		case 'D':
+			head_current.y--;
+			break;
+		default:
+			break;
+		}
+		move_tail(head_current, tail_current);
+		add_tail_pos(tail_pos, tail_current);
+		step_count++;
+	}
+}
+
 int main()
 {
-	std::vector<std::vector<std::pair<int, bool> > > forest;
-	int	trees = 0;
+	std::vector<t_coord> 		tail_pos;
+	t_coord						head_current;
+	t_coord						tail_current;
+	std::vector<std::string>	command;
+	std::string					dir;
+	int							step;
+
+	head_current.x = 0;
+	head_current.y = 0;
+	tail_current.x = 0;
+	tail_current.y = 0;
+	add_tail_pos(tail_pos, tail_current);
 
 	std::string		line;
 	std::ifstream	fd("input.txt");
 	while (std::getline(fd, line))
 	{
-		std::vector<std::pair<int, bool> > row;
-		int i = 0;
-		while (i < line.size())
-		{
-			std::pair<int, bool> tree;
-			tree = std::make_pair (line[i] - 48, false);
-			row.push_back(tree);
-			i++;
-		}
-		forest.push_back(row);
+		command = split(line);
+		dir = command.at(0);
+		step = std::stoi(command.at(1));
+		move_head(tail_pos, head_current, tail_current, dir, step);
 	}
-	for (std::vector<std::vector<std::pair<int, bool> > >::iterator row = ++forest.begin(); row != --forest.end(); row++)
-	{
-		int col = 0;
-		int mem_size = (*row).at(col).first;
-		while (col <= (*row).size() - 1)
-		{
-			if ((*row).at(col).first > mem_size && (*row).at(col).second == false)
-			{
-				trees++;
-				mem_size = (*row).at(col).first;
-				(*row).at(col).second = true;
-			}
-			else if ((*row).at(col).first > mem_size)
-				mem_size = (*row).at(col).first;
-			col++;
-		}
-		col = (*row).size() - 1;
-		mem_size = (*row).at(col).first;
-		while (col >= 1)
-		{
-			if ((*row).at(col).first > mem_size && (*row).at(col).second == false)
-			{
-				trees++;
-				mem_size = (*row).at(col).first;
-				(*row).at(col).second = true;
-			}
-			else if ((*row).at(col).first > mem_size)
-				mem_size = (*row).at(col).first;
-			col--;
-		}
-	}
-	int col = forest.at(0).size() - 2;
-	while (col >= 1)
-	{
-		int mem_size = forest.at(0).at(col).first;
-		for (std::vector<std::vector<std::pair<int, bool> > >::iterator row = ++forest.begin(); row != --forest.end(); row++)
-		{
-			if ((*row).at(col).first > mem_size && (*row).at(col).second == false)
-			{
-				trees++;
-				mem_size = (*row).at(col).first;
-				(*row).at(col).second = true;
-			}
-			else if ((*row).at(col).first > mem_size)
-				mem_size = (*row).at(col).first;
-		}
-		mem_size = forest.back().at(col).first;
-		for (std::vector<std::vector<std::pair<int, bool> > >::iterator row = --forest.end(); row != ++forest.begin(); row--)
-		{
-			if ((*row).at(col).first > mem_size && (*row).at(col).second == false)
-			{
-				trees++;
-				mem_size = (*row).at(col).first;
-				(*row).at(col).second = true;
-			}
-			else if ((*row).at(col).first > mem_size)
-				mem_size = (*row).at(col).first;
-		}
-		col--;
-	}
-
-	for (std::vector<std::vector<std::pair<int, bool> > >::iterator row = forest.begin(); row != forest.end(); row++)
-	{
-		for (std::vector<std::pair<int, bool> >::iterator col = (*row).begin(); col != (*row).end(); col++)
-		{
-			if ((*col).second == true)
-				std::cout << "\x1B[32m" << (*col).first << "\033[0m";
-			else
-				std::cout << "\x1B[31m" << (*col).first << "\033[0m";
-		}
-		std::cout << std::endl;
-	}
-
-	trees += 2 * (forest.size() - 1) + 2 * (forest.at(0).size() - 1);
-
-	std::cout << trees << std::endl;
+	std::cout << tail_pos.size() <<std::endl;
 }
