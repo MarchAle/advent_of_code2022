@@ -15,7 +15,7 @@ void	routine_m0(std::vector<std::vector<int> > &monkeys, std::vector<int> &count
 	for (std::vector<int>::iterator item = monkeys.at(0).begin(); item != monkeys.at(0).end(); item++)
 	{
 		int new_item = (*item) * 17;
-		new_item /= 3;
+		new_item %= 9699690;
 		if (new_item % 13 == 0)
 			monkeys.at(6).push_back(new_item);
 		else
@@ -30,7 +30,7 @@ void	routine_m1(std::vector<std::vector<int> > &monkeys, std::vector<int> &count
 	for (std::vector<int>::iterator item = monkeys.at(1).begin(); item != monkeys.at(1).end(); item++)
 	{
 		int new_item = (*item) + 8;
-		new_item /= 3;
+		new_item %= 9699690;
 		if (new_item % 7 == 0)
 			monkeys.at(0).push_back(new_item);
 		else
@@ -45,7 +45,7 @@ void	routine_m2(std::vector<std::vector<int> > &monkeys, std::vector<int> &count
 	for (std::vector<int>::iterator item = monkeys.at(2).begin(); item != monkeys.at(2).end(); item++)
 	{
 		int new_item = (*item) + 6;
-		new_item /= 3;
+		new_item %= 9699690;
 		if (new_item % 19 == 0)
 			monkeys.at(5).push_back(new_item);
 		else
@@ -60,7 +60,7 @@ void	routine_m3(std::vector<std::vector<int> > &monkeys, std::vector<int> &count
 	for (std::vector<int>::iterator item = monkeys.at(3).begin(); item != monkeys.at(3).end(); item++)
 	{
 		int new_item = (*item) * 19;
-		new_item /= 3;
+		new_item %= 9699690;
 		if (new_item % 2 == 0)
 			monkeys.at(4).push_back(new_item);
 		else
@@ -75,7 +75,7 @@ void	routine_m4(std::vector<std::vector<int> > &monkeys, std::vector<int> &count
 	for (std::vector<int>::iterator item = monkeys.at(4).begin(); item != monkeys.at(4).end(); item++)
 	{
 		int new_item = (*item) + 7;
-		new_item /= 3;
+		new_item %= 9699690;
 		if (new_item % 5 == 0)
 			monkeys.at(1).push_back(new_item);
 		else
@@ -90,7 +90,7 @@ void	routine_m5(std::vector<std::vector<int> > &monkeys, std::vector<int> &count
 	for (std::vector<int>::iterator item = monkeys.at(5).begin(); item != monkeys.at(5).end(); item++)
 	{
 		int new_item = (*item) * (*item);
-		new_item /= 3;
+		new_item %= 9699690;
 		if (new_item % 3 == 0)
 			monkeys.at(3).push_back(new_item);
 		else
@@ -105,7 +105,7 @@ void	routine_m6(std::vector<std::vector<int> > &monkeys, std::vector<int> &count
 	for (std::vector<int>::iterator item = monkeys.at(6).begin(); item != monkeys.at(6).end(); item++)
 	{
 		int new_item = (*item) + 1;
-		new_item /= 3;
+		new_item %= 9699690;
 		if (new_item % 11 == 0)
 			monkeys.at(5).push_back(new_item);
 		else
@@ -120,7 +120,7 @@ void	routine_m7(std::vector<std::vector<int> > &monkeys, std::vector<int> &count
 	for (std::vector<int>::iterator item = monkeys.at(7).begin(); item != monkeys.at(7).end(); item++)
 	{
 		int new_item = (*item) + 2;
-		new_item /= 3;
+		new_item %= 9699690;
 		if (new_item % 17 == 0)
 			monkeys.at(6).push_back(new_item);
 		else
